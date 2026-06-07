@@ -16,14 +16,14 @@ export default function ResidualSection() {
   const [animated, setAnimated] = useState(false)
 
   return (
-    <section className="px-8 py-16 border-b border-slate-800/50">
+    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 font-bold text-xs">07</span>
             <h2 className="text-2xl font-bold text-white">Residual Stream</h2>
           </div>
-          <p className="text-slate-400 leading-relaxed ml-11 max-w-2xl">
+          <p className="text-slate-400 leading-relaxed sm:ml-11 max-w-2xl text-sm sm:text-base">
             Each sub-layer <em>adds</em> its output to its input rather than replacing it.
             This <strong className="text-slate-200">residual connection</strong> lets information flow
             unimpeded through all layers — and gives gradients a direct path back during training,

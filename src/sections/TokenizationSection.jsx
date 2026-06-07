@@ -92,14 +92,14 @@ export default function TokenizationSection() {
   const words = text.trim().split(/\s+/).filter(Boolean)
 
   return (
-    <section className="px-8 py-16 border-b border-slate-800/50">
+    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-xs">01</span>
             <h2 className="text-2xl font-bold text-white">Tokenization</h2>
           </div>
-          <p className="text-slate-400 leading-relaxed ml-11 max-w-2xl">
+          <p className="text-slate-400 leading-relaxed sm:ml-11 max-w-2xl text-sm sm:text-base">
             Before an LLM reads your text, it converts it into <strong className="text-slate-200">tokens</strong> — integer IDs representing subword pieces.
             The model <em>never sees letters</em>; it only processes these numbers. Type anything below to see it in action.
           </p>

@@ -72,14 +72,14 @@ export default function NextTokenSection() {
   const handlePromptChange = (i) => { setPromptIdx(i); setChosen(null) }
 
   return (
-    <section className="px-8 py-16 border-b border-slate-800/50">
+    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 font-bold text-xs">08</span>
             <h2 className="text-2xl font-bold text-white">Next-Token Prediction</h2>
           </div>
-          <p className="text-slate-400 leading-relaxed ml-11 max-w-2xl">
+          <p className="text-slate-400 leading-relaxed sm:ml-11 max-w-2xl text-sm sm:text-base">
             The final layer maps each token vector to <strong className="text-slate-200">logits</strong> — one raw score per vocabulary entry.
             Softmax turns these into probabilities. Decoding parameters like
             <strong className="text-slate-200"> temperature</strong> and <strong className="text-slate-200">top-k</strong> control how the next token is sampled.

@@ -31,14 +31,14 @@ export default function PositionalEncodingSection() {
   const CELL = 18
 
   return (
-    <section className="px-8 py-16 border-b border-slate-800/50">
+    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-green-500/20 border border-green-500/30 flex items-center justify-center text-green-400 font-bold text-xs">03</span>
             <h2 className="text-2xl font-bold text-white">Positional Encoding</h2>
           </div>
-          <p className="text-slate-400 leading-relaxed ml-11 max-w-2xl">
+          <p className="text-slate-400 leading-relaxed sm:ml-11 max-w-2xl text-sm sm:text-base">
             Transformers process all tokens in parallel — they have no built-in sense of order.
             <strong className="text-slate-200"> Positional encodings</strong> add a unique pattern to each position's
             embedding so the model knows where each token sits in the sequence.

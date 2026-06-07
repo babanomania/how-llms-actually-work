@@ -88,14 +88,14 @@ export default function ArchitectureSection() {
   const scrollTo = id => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
   return (
-    <section className="px-8 py-16">
+    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-xs">09</span>
             <h2 className="text-2xl font-bold text-white">Full Architecture</h2>
           </div>
-          <p className="text-slate-400 leading-relaxed ml-11 max-w-2xl">
+          <p className="text-slate-400 leading-relaxed sm:ml-11 max-w-2xl text-sm sm:text-base">
             Every component you've explored fits into this stack. Click any block to revisit that section.
             Modern LLMs share this blueprint — differences live in scale, training data, and fine-tuning.
           </p>
@@ -241,11 +241,12 @@ export default function ArchitectureSection() {
 
         {/* Final summary */}
         <div className="bg-gradient-to-br from-indigo-500/10 to-violet-500/10 border border-indigo-500/20 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-white mb-3">You now understand how LLMs work</h3>
+          <h3 className="text-lg font-bold text-white mb-3">That's the forward pass — the core loop</h3>
           <p className="text-slate-400 text-sm leading-relaxed mb-4 max-w-2xl">
             Text → tokens → embeddings + positions → N × (attention + FFN + residuals) → logits → softmax → next token.
-            That's the whole loop. What varies across models is scale, training data, and the fine-tuning recipe —
-            not the fundamental architecture.
+            You now understand the machinery. But a freshly built transformer is useless — it has random weights.
+            Keep going to see how it <strong className="text-slate-300">learns</strong>, how it becomes an <strong className="text-slate-300">assistant</strong>,
+            how it actually <strong className="text-slate-300">runs</strong>, and why it <strong className="text-slate-300">hallucinates</strong>.
           </p>
           <div className="flex flex-wrap gap-2">
             {[

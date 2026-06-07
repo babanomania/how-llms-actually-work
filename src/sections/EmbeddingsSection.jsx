@@ -68,14 +68,14 @@ export default function EmbeddingsSection() {
   const activeW = WORDS.find(w => w.word === active)
 
   return (
-    <section className="px-8 py-16 border-b border-slate-800/50">
+    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center text-violet-400 font-bold text-xs">02</span>
             <h2 className="text-2xl font-bold text-white">Embeddings</h2>
           </div>
-          <p className="text-slate-400 leading-relaxed ml-11 max-w-2xl">
+          <p className="text-slate-400 leading-relaxed sm:ml-11 max-w-2xl text-sm sm:text-base">
             Token IDs are just row-indexes into an <strong className="text-slate-200">embedding matrix</strong>. Each row is a learned
             high-dimensional vector — words used in similar contexts end up geometrically close together. Hover any word below.
           </p>
