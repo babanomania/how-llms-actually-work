@@ -10,7 +10,7 @@ const ALL = [...PROMPT, ...GEN]
 // per-token KV memory (illustrative): 2(K,V) × 32 layers × 4096 dim × 2 bytes ≈ 0.5 MB
 const MB_PER_TOKEN = 0.5
 
-export default function KVCacheSection() {
+export default function KVCacheSection({ embedded = false }) {
   // pos = how many tokens have been processed. prompt is "prefilled" together.
   const [pos, setPos] = useState(PROMPT.length)
   const [playing, setPlaying] = useState(false)
@@ -39,7 +39,7 @@ export default function KVCacheSection() {
   const phase = pos <= PROMPT.length ? 'prefill' : (pos >= ALL.length ? 'done' : 'decode')
 
   return (
-    <SectionShell>
+    <SectionShell embedded={embedded}>
       <SectionHeader num="15" title="KV Cache & Inference" accent={ACCENT}>
         Generation feels like the model "types" one token at a time — and it does. The trick that makes it fast is the{' '}
         <strong className="text-slate-200">KV cache</strong>: every token's Key and Value vectors are saved, so each new token

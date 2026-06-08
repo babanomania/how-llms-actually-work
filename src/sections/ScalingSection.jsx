@@ -48,7 +48,7 @@ const TASKS = [
 const sigmoid = (x) => 1 / (1 + Math.exp(-x))
 const accuracy = (logN, task) => sigmoid((logN - task.thr) / task.width) * 0.95
 
-export default function ScalingSection() {
+export default function ScalingSection({ embedded = false }) {
   const [logC, setLogC] = useState(23.5)      // log10 of compute (FLOPs)
   const [task, setTask] = useState(0)
 
@@ -84,7 +84,7 @@ export default function ScalingSection() {
   const curLogN = Math.log10(N)
 
   return (
-    <SectionShell>
+    <SectionShell embedded={embedded}>
       <SectionHeader num="11" title="Scaling Laws & Emergence" accent={ACCENT}>
         Why did models suddenly get so good? Because performance improves <strong className="text-slate-200">predictably</strong> with
         scale. Pour in more compute, and loss drops along a smooth power law — so much so that labs forecast a model's

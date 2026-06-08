@@ -62,14 +62,14 @@ const PROMPTS = [
   },
 ]
 
-export default function RLHFSection() {
+export default function RLHFSection({ embedded = false }) {
   const [stage, setStage] = useState(1)
   const [pIdx, setPIdx] = useState(0)
   const [mode, setMode] = useState('aligned')
   const p = PROMPTS[pIdx]
 
   return (
-    <SectionShell>
+    <SectionShell embedded={embedded}>
       <SectionHeader num="12" title="RLHF & Alignment" accent={ACCENT}>
         Here's the secret almost no architecture article tells you: <strong className="text-slate-200">ChatGPT is not GPT</strong>.
         A freshly pretrained model is a strange, rambling text-completer. Turning it into a helpful assistant takes three more

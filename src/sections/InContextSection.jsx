@@ -26,7 +26,7 @@ const COT_STEPS = [
   'So 2x + 1.00 = 1.10  →  2x = 0.10  →  x = 0.05.',
 ]
 
-export default function InContextSection() {
+export default function InContextSection({ embedded = false }) {
   const [shots, setShots] = useState(0)
   const [cot, setCot] = useState(false)
 
@@ -35,7 +35,7 @@ export default function InContextSection() {
   const correct = shots >= 2
 
   return (
-    <SectionShell>
+    <SectionShell embedded={embedded}>
       <SectionHeader num="13" title="In-Context Learning" accent={ACCENT}>
         Something remarkable: an LLM can learn a brand-new task from a few examples in your prompt —{' '}
         <strong className="text-slate-200">without changing a single weight</strong>. The "learning" happens entirely inside

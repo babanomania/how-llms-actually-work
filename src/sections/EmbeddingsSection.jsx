@@ -59,7 +59,7 @@ const W = 500, H = 380, PAD = 28
 const sx = pct => PAD + (pct / 100) * (W - 2 * PAD)
 const sy = pct => PAD + (pct / 100) * (H - 2 * PAD)
 
-export default function EmbeddingsSection() {
+export default function EmbeddingsSection({ embedded = false }) {
   const [hovered, setHovered] = useState(null)
   const [selected, setSelected] = useState(null)
 
@@ -68,9 +68,9 @@ export default function EmbeddingsSection() {
   const activeW = WORDS.find(w => w.word === active)
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+    <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-10">
+        <div className={embedded ? 'hidden' : 'mb-10'}>
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center text-violet-400 font-bold text-xs">02</span>
             <h2 className="text-2xl font-bold text-white">Embeddings</h2>
@@ -174,7 +174,7 @@ export default function EmbeddingsSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={embedded ? 'hidden' : 'grid grid-cols-1 md:grid-cols-3 gap-4'}>
           {[
             { title: 'Lookup Table', body: 'The embedding matrix is a giant table. Token ID 3967 always maps to the same 4,096-dimensional vector — no computation, just a read.' },
             { title: 'Learned, Not Designed', body: 'Vectors aren\'t hand-crafted. They emerge from training: similar words must share structure for the model to predict well.' },

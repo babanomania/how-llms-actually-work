@@ -29,7 +29,7 @@ const softmax = (xs) => {
 const TOTAL_PARAMS = 47   // Mixtral 8x7B-ish, in billions
 const ACTIVE_PARAMS = 13
 
-export default function MoESection() {
+export default function MoESection({ embedded = false }) {
   const [tIdx, setTIdx] = useState(0)
   const [dense, setDense] = useState(false)
 
@@ -40,7 +40,7 @@ export default function MoESection() {
   const chosen = dense ? probs.map((_, i) => i) : ranked.slice(0, 2).map(r => r.i)
 
   return (
-    <SectionShell>
+    <SectionShell embedded={embedded}>
       <SectionHeader num="14" title="Mixture of Experts (MoE)" accent={ACCENT}>
         GPT-4, Mixtral, DeepSeek and Gemini reportedly share a trick the textbook transformer doesn't have. Instead of one giant
         feed-forward network, they hold <strong className="text-slate-200">many expert networks</strong> plus a{' '}

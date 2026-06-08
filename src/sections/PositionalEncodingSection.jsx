@@ -18,7 +18,7 @@ function valToColor(v) {
   return `rgb(${r},${g},${b})`
 }
 
-export default function PositionalEncodingSection() {
+export default function PositionalEncodingSection({ embedded = false }) {
   const [hoverPos, setHoverPos] = useState(null)
   const [hoverDim, setHoverDim] = useState(null)
   const [selPos, setSelPos] = useState(5)
@@ -31,9 +31,9 @@ export default function PositionalEncodingSection() {
   const CELL = 18
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+    <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-10">
+        <div className={embedded ? 'hidden' : 'mb-10'}>
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-green-500/20 border border-green-500/30 flex items-center justify-center text-green-400 font-bold text-xs">03</span>
             <h2 className="text-2xl font-bold text-white">Positional Encoding</h2>
@@ -150,7 +150,7 @@ export default function PositionalEncodingSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={embedded ? 'hidden' : 'grid grid-cols-1 md:grid-cols-3 gap-4'}>
           {[
             { title: 'Why Sinusoidal?', body: 'Each dimension oscillates at a different frequency, creating a unique fingerprint per position. Low dims = slow waves (global); high dims = fast waves (local).' },
             { title: 'Modern: RoPE', body: 'Most current LLMs (LLaMA, Mistral, GPT-4) use Rotary Position Embeddings. RoPE rotates the Q and K vectors by position, encoding relative distance naturally.' },

@@ -1,5 +1,12 @@
+import { createContext, useContext } from 'react'
+
 // Shared, mobile-first UI primitives used by the deep-dive sections.
 // Accent classes are written as full literals so Tailwind's JIT detects them.
+
+// When a section renders inside the blog article it passes embedded=true.
+// The shared chrome (section header + concept-card recap) then disappears,
+// leaving just the interactive demo so the prose can carry the narrative.
+const EmbeddedContext = createContext(false)
 
 export const ACCENTS = {
   blue:    { text: 'text-blue-400',    badgeBg: 'bg-blue-500/20',    badgeBorder: 'border-blue-500/30',    cardBg: 'bg-blue-500/5',    cardBorder: 'border-blue-500/20',    hex: '#3b82f6' },
@@ -15,15 +22,25 @@ export const ACCENTS = {
   indigo:  { text: 'text-indigo-400',  badgeBg: 'bg-indigo-500/20',  badgeBorder: 'border-indigo-500/30',  cardBg: 'bg-indigo-500/5',  cardBorder: 'border-indigo-500/20',  hex: '#6366f1' },
 }
 
-export function SectionShell({ children, last = false }) {
+export function SectionShell({ children, last = false, embedded = false }) {
+  if (embedded) {
+    return (
+      <EmbeddedContext.Provider value={true}>
+        <div className="space-y-4 sm:space-y-5">{children}</div>
+      </EmbeddedContext.Provider>
+    )
+  }
   return (
-    <section className={`px-4 sm:px-6 lg:px-8 py-12 sm:py-16 ${last ? '' : 'border-b border-slate-800/50'}`}>
-      <div className="max-w-4xl mx-auto">{children}</div>
-    </section>
+    <EmbeddedContext.Provider value={false}>
+      <section className={`px-4 sm:px-6 lg:px-8 py-12 sm:py-16 ${last ? '' : 'border-b border-slate-800/50'}`}>
+        <div className="max-w-4xl mx-auto">{children}</div>
+      </section>
+    </EmbeddedContext.Provider>
   )
 }
 
 export function SectionHeader({ num, title, accent, children }) {
+  if (useContext(EmbeddedContext)) return null
   const a = ACCENTS[accent]
   return (
     <div className="mb-8 sm:mb-10">
@@ -53,6 +70,7 @@ export function Panel({ label, right, children, className = '' }) {
 }
 
 export function ConceptCards({ accent, cards }) {
+  if (useContext(EmbeddedContext)) return null
   const a = ACCENTS[accent]
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">

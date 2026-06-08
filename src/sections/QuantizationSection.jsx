@@ -33,7 +33,7 @@ const quantize = (v, levels) => {
   return Math.round((v + 1) / step) * step - 1
 }
 
-export default function QuantizationSection() {
+export default function QuantizationSection({ embedded = false }) {
   const [fmtIdx, setFmtIdx] = useState(2)
   const [modelIdx, setModelIdx] = useState(2)
 
@@ -43,7 +43,7 @@ export default function QuantizationSection() {
   const fp32Bytes = model.params * 4
 
   return (
-    <SectionShell>
+    <SectionShell embedded={embedded}>
       <SectionHeader num="16" title="Quantization" accent={ACCENT}>
         How does a 70-billion-parameter model run on a gaming laptop? Each weight is stored in <em>fewer bits</em>. A model is
         just a giant pile of numbers — store them at lower precision and the whole thing shrinks dramatically, with surprisingly

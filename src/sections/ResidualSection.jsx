@@ -11,14 +11,14 @@ const LAYERS = [
   { name: 'Final Output',    color: '#3b82f6', desc: 'Logits computed over vocabulary. All layers contributed additively.' },
 ]
 
-export default function ResidualSection() {
+export default function ResidualSection({ embedded = false }) {
   const [hovered, setHovered] = useState(null)
   const [animated, setAnimated] = useState(false)
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+    <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-10">
+        <div className={embedded ? 'hidden' : 'mb-10'}>
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 font-bold text-xs">07</span>
             <h2 className="text-2xl font-bold text-white">Residual Stream</h2>
@@ -170,7 +170,7 @@ export default function ResidualSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={embedded ? 'hidden' : 'grid grid-cols-1 md:grid-cols-3 gap-4'}>
           {[
             { title: 'Introduced in ResNet', body: 'Residual connections were first used in computer vision (He et al., 2016). Transformers adopted them directly — one of the key design choices that scales.' },
             { title: 'Information Bottleneck', body: 'Without residuals, each layer must compress and reconstruct all relevant information. Residuals free layers to specialise in refinements only.' },

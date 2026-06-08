@@ -16,6 +16,7 @@ import MoESection from './sections/MoESection'
 import KVCacheSection from './sections/KVCacheSection'
 import QuantizationSection from './sections/QuantizationSection'
 import HallucinationSection from './sections/HallucinationSection'
+import BlogContent from './BlogContent'
 
 const GROUPS = [
   {
@@ -82,9 +83,9 @@ export default function App() {
   useEffect(() => {
     const obs = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id) }),
-      { rootMargin: '-30% 0px -60% 0px' }
+      { rootMargin: '-20% 0px -70% 0px' }
     )
-    Object.values(refs.current).forEach(r => r && obs.observe(r))
+    ALL.forEach(s => { const el = document.getElementById(s.id); if (el) obs.observe(el) })
     return () => obs.disconnect()
   }, [])
 
@@ -198,12 +199,8 @@ export default function App() {
             </div>
           </section>
 
-          {/* All sections */}
-          {ALL.map(({ id, Comp }) => (
-            <div key={id} id={id} ref={el => refs.current[id] = el}>
-              <Comp />
-            </div>
-          ))}
+          {/* The blog: long-form prose with the interactive demos embedded inline */}
+          <BlogContent />
 
           <footer className="border-t border-slate-800/50 px-4 sm:px-8 py-8 text-center text-sm text-slate-600">
             <p className="max-w-xl mx-auto leading-relaxed">

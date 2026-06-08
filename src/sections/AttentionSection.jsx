@@ -37,7 +37,7 @@ const EXAMPLES = {
   },
 }
 
-export default function AttentionSection() {
+export default function AttentionSection({ embedded = false }) {
   const [exKey, setExKey] = useState(Object.keys(EXAMPLES)[0])
   const [selRow, setSelRow] = useState(null)
   const { tokens, matrix, insight } = EXAMPLES[exKey]
@@ -49,9 +49,9 @@ export default function AttentionSection() {
   }
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+    <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-10">
+        <div className={embedded ? 'hidden' : 'mb-10'}>
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-xs">04</span>
             <h2 className="text-2xl font-bold text-white">Attention Mechanism</h2>
@@ -162,7 +162,7 @@ export default function AttentionSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={embedded ? 'hidden' : 'grid grid-cols-1 md:grid-cols-3 gap-4'}>
           {[
             { title: 'O(n²) Cost', body: 'Every token attends to every other token — quadratic in sequence length. A 4k-token sequence has 16M attention pairs. This is why long context is expensive.' },
             { title: 'Scaled Dot-Product', body: 'Dividing by √dₖ prevents dot products from growing too large in high dimensions, keeping softmax gradients healthy during training.' },

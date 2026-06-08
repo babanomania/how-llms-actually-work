@@ -84,7 +84,7 @@ const EXAMPLES = [
   'Neural networks learn from training data.',
 ]
 
-export default function TokenizationSection() {
+export default function TokenizationSection({ embedded = false }) {
   const [text, setText] = useState(EXAMPLES[0])
   const [hovered, setHovered] = useState(null)
 
@@ -92,9 +92,9 @@ export default function TokenizationSection() {
   const words = text.trim().split(/\s+/).filter(Boolean)
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+    <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-10">
+        <div className={embedded ? 'hidden' : 'mb-10'}>
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-xs">01</span>
             <h2 className="text-2xl font-bold text-white">Tokenization</h2>
@@ -174,7 +174,7 @@ export default function TokenizationSection() {
         </div>
 
         {/* Concept cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={embedded ? 'hidden' : 'grid grid-cols-1 md:grid-cols-3 gap-4'}>
           {[
             { color: 'blue', title: 'Byte Pair Encoding', body: 'BPE learns which character pairs to merge based on training data frequency. Common words stay whole; rare words split into known pieces.' },
             { color: 'blue', title: 'Vocabulary Size', body: 'GPT-4 ≈ 100k tokens. LLaMA ≈ 32k. Larger vocabularies need fewer tokens per sentence, but a bigger (heavier) embedding matrix.' },

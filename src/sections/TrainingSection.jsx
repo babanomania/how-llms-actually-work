@@ -19,7 +19,7 @@ const CURVE = (() => {
   return pts.join(' ')
 })()
 
-export default function TrainingSection() {
+export default function TrainingSection({ embedded = false }) {
   const [w, setW] = useState(START)
   const [lr, setLr] = useState(0.6)
   const [history, setHistory] = useState([{ step: 0, loss: loss(START), w: START }])
@@ -68,7 +68,7 @@ export default function TrainingSection() {
   }).join(' ')
 
   return (
-    <SectionShell>
+    <SectionShell embedded={embedded}>
       <SectionHeader num="10" title="Training & Backpropagation" accent={ACCENT}>
         A fresh model is <em>random</em> — its weights are noise. Training shows it trillions of tokens and, for each, nudges
         every weight a tiny bit to make the correct next token more likely. That nudge is computed by{' '}

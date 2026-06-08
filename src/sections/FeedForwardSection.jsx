@@ -50,7 +50,7 @@ function NeuronBar({ value, maxVal, color, active }) {
 const DEMO_INPUT = [0.8, -0.3, 0.6, 0.9, -0.7, 0.4, 0.2, -0.5]
 const HIDDEN = Array.from({ length: 24 }, (_, i) => Math.sin(i * 0.7 + 0.3) * 1.2 + Math.cos(i * 0.4) * 0.5)
 
-export default function FeedForwardSection() {
+export default function FeedForwardSection({ embedded = false }) {
   const [step, setStep] = useState(0)
   const [actName, setActName] = useState('SwiGLU')
 
@@ -64,9 +64,9 @@ export default function FeedForwardSection() {
   const isCompressed = step >= 3
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+    <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-10">
+        <div className={embedded ? 'hidden' : 'mb-10'}>
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 font-bold text-xs">06</span>
             <h2 className="text-2xl font-bold text-white">Feed-Forward Network</h2>
@@ -174,7 +174,7 @@ export default function FeedForwardSection() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={embedded ? 'hidden' : 'grid grid-cols-1 md:grid-cols-3 gap-4'}>
           {[
             { title: 'Most Parameters Here', body: 'In a dense transformer, the FFN layers hold ~⅔ of all parameters — more than attention. A 7B model has ~5B params in FFN alone.' },
             { title: 'Factual Storage', body: 'Research (Geva et al.) shows specific FFN neurons encode specific facts. Some neurons activate specifically for "Rome → Italy" associations.' },

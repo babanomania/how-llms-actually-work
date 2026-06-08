@@ -54,7 +54,7 @@ function softmax(logits, temp) {
 const TOPK_OPTIONS = [1, 2, 3, 5]
 const COLORS = ['#6366f1','#8b5cf6','#a855f7','#c026d3','#db2777']
 
-export default function NextTokenSection() {
+export default function NextTokenSection({ embedded = false }) {
   const [promptIdx, setPromptIdx] = useState(0)
   const [temp, setTemp] = useState(1.0)
   const [topK, setTopK] = useState(5)
@@ -72,9 +72,9 @@ export default function NextTokenSection() {
   const handlePromptChange = (i) => { setPromptIdx(i); setChosen(null) }
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+    <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-10">
+        <div className={embedded ? 'hidden' : 'mb-10'}>
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 font-bold text-xs">08</span>
             <h2 className="text-2xl font-bold text-white">Next-Token Prediction</h2>
@@ -216,7 +216,7 @@ export default function NextTokenSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={embedded ? 'hidden' : 'grid grid-cols-1 md:grid-cols-3 gap-4'}>
           {[
             { title: 'Autoregressive', body: 'Each generated token is appended to the context, and the model runs again to predict the next. A 500-token response requires 500 forward passes.' },
             { title: 'Top-p (Nucleus)', body: 'An alternative to top-k: sample from the smallest set of tokens whose cumulative probability exceeds p (e.g. 0.9). Adapts to the distribution\'s shape.' },

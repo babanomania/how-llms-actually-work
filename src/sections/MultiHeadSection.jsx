@@ -86,16 +86,16 @@ function MiniHeatmap({ matrix, color, selRow, onRowClick }) {
   )
 }
 
-export default function MultiHeadSection() {
+export default function MultiHeadSection({ embedded = false }) {
   const [selRows, setSelRows] = useState([null, null, null, null])
   const [activeHead, setActiveHead] = useState(0)
 
   const setRow = (hi, row) => setSelRows(prev => prev.map((r, i) => i === hi ? row : r))
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+    <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-10">
+        <div className={embedded ? 'hidden' : 'mb-10'}>
           <div className="flex items-center gap-3 mb-3">
             <span className="w-8 h-8 rounded-lg bg-pink-500/20 border border-pink-500/30 flex items-center justify-center text-pink-400 font-bold text-xs">05</span>
             <h2 className="text-2xl font-bold text-white">Multi-Head Attention</h2>
@@ -159,7 +159,7 @@ export default function MultiHeadSection() {
           <p className="text-xs text-slate-500 mt-3">Outputs from all heads are concatenated and projected back to model dimension via W_O.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className={embedded ? 'hidden' : 'grid grid-cols-1 md:grid-cols-3 gap-4'}>
           {[
             { title: 'Emergent Specialization', body: 'Heads aren\'t told what to learn. Syntactic, semantic, and positional heads emerge purely from minimizing prediction loss during training.' },
             { title: 'GQA for Efficiency', body: 'Grouped-Query Attention (used in LLaMA 2/3) shares K and V heads across multiple Q heads — reducing memory for the KV cache during inference.' },

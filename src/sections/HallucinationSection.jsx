@@ -27,13 +27,13 @@ const CASES = [
   },
 ]
 
-export default function HallucinationSection() {
+export default function HallucinationSection({ embedded = false }) {
   const [cIdx, setCIdx] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const c = CASES[cIdx]
 
   return (
-    <SectionShell last>
+    <SectionShell last embedded={embedded}>
       <SectionHeader num="17" title="Why Hallucinations Happen" accent={ACCENT}>
         Now you have the pieces to understand the most misunderstood LLM behaviour. A model doesn't <em>look up</em> facts — it{' '}
         <strong className="text-slate-200">predicts the next plausible token</strong>. When it knows the answer, plausible and
