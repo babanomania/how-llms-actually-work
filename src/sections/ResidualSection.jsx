@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const LAYERS = [
   { name: 'Token Embedding', color: '#6366f1', desc: 'Raw token + positional embedding. Carries basic lexical meaning.' },
@@ -13,7 +13,30 @@ const LAYERS = [
 
 export default function ResidualSection({ embedded = false }) {
   const [hovered, setHovered] = useState(null)
-  const [animated, setAnimated] = useState(false)
+  const [step, setStep] = useState(0)        // how many layers have written to the stream
+  const [playing, setPlaying] = useState(false)
+  const stepRef = useRef(0)
+
+  useEffect(() => {
+    if (!playing) return
+    const id = setInterval(() => {
+      stepRef.current += 1
+      setStep(stepRef.current)
+      if (stepRef.current >= LAYERS.length) { setPlaying(false) }
+    }, 700)
+    return () => clearInterval(id)
+  }, [playing])
+
+  const reset = () => { setPlaying(false); stepRef.current = 0; setStep(0) }
+  const toggle = () => {
+    if (step >= LAYERS.length) { stepRef.current = 0; setStep(0) }
+    setPlaying(p => !p)
+  }
+
+  // during playback the "active" layer is the one currently writing; otherwise hover wins
+  const playingIdx = step > 0 ? step - 1 : null
+  const active = playingIdx != null ? playingIdx : hovered
+  const done = step >= LAYERS.length
 
   return (
     <section className={embedded ? '' : 'px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50'}>
@@ -32,71 +55,101 @@ export default function ResidualSection({ embedded = false }) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Residual flow diagram */}
+          {/* Animated accumulation */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-            <p className="text-xs font-mono text-slate-500 uppercase tracking-wider mb-4">Information flow — hover a layer</p>
-            <div className="flex gap-4">
-              {/* Main stream */}
-              <div className="flex flex-col items-center relative">
-                <div className="text-xs text-slate-500 mb-2">stream</div>
-                {LAYERS.map((layer, i) => (
-                  <div key={i} className="flex flex-col items-center">
-                    <div
-                      className="w-12 h-10 rounded-lg flex items-center justify-center text-xs font-bold cursor-pointer transition-all border"
-                      style={{
-                        background: hovered === i ? layer.color + '33' : '#1e293b',
-                        borderColor: hovered === i ? layer.color : '#334155',
-                        color: hovered === i ? layer.color : '#64748b',
-                      }}
-                      onMouseEnter={() => setHovered(i)}
-                      onMouseLeave={() => setHovered(null)}
-                    >
-                      L{i}
-                    </div>
-                    {i < LAYERS.length - 1 && (
-                      <div className="w-0.5 h-4 bg-slate-700 relative">
-                        <div
-                          className="absolute inset-0 transition-all duration-300"
-                          style={{ background: hovered !== null && hovered >= i ? LAYERS[i].color : 'transparent' }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Residual bypass lines */}
-              <div className="relative flex-1 flex flex-col justify-between py-5">
-                {LAYERS.map((layer, i) => (
-                  <div key={i} className="flex items-center gap-2 h-10 mb-4">
-                    <div
-                      className="h-0.5 flex-1 transition-all duration-300"
-                      style={{ background: hovered === i ? layer.color : '#1e293b' }}
-                    />
-                    <div
-                      className="flex-1 rounded-lg px-2 py-1 text-xs cursor-pointer transition-all border"
-                      style={{
-                        background: hovered === i ? layer.color + '15' : 'transparent',
-                        borderColor: hovered === i ? layer.color + '60' : '#1e293b',
-                        color: hovered === i ? '#e2e8f0' : '#475569',
-                      }}
-                      onMouseEnter={() => setHovered(i)}
-                      onMouseLeave={() => setHovered(null)}
-                    >
-                      {layer.name}
-                    </div>
-                  </div>
-                ))}
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-xs font-mono text-slate-500 uppercase tracking-wider">Watch the stream accumulate</p>
+              <div className="flex gap-2">
+                <button onClick={toggle}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white transition-all active:scale-95"
+                  style={{ background: '#14b8a6' }}>
+                  {playing ? (
+                    <><svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg> Pause</>
+                  ) : (
+                    <><svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg> {done ? 'Replay' : 'Play'}</>
+                  )}
+                </button>
+                <button onClick={reset}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 bg-slate-800 border border-slate-700 hover:bg-slate-700 transition-all active:scale-95">
+                  Reset
+                </button>
               </div>
             </div>
 
-            {hovered !== null && (
-              <div className="mt-3 p-3 rounded-lg border text-xs text-slate-400 transition-all"
-                style={{ borderColor: LAYERS[hovered].color + '40', background: LAYERS[hovered].color + '10' }}>
-                <span style={{ color: LAYERS[hovered].color }} className="font-semibold">{LAYERS[hovered].name}: </span>
-                {LAYERS[hovered].desc}
+            <div className="flex gap-3">
+              {/* layer column */}
+              <div className="flex-1 flex flex-col gap-1.5">
+                {LAYERS.map((layer, i) => {
+                  const processed = i < step
+                  const isActive = i === active
+                  const isCurrent = playing && i === step - 1
+                  return (
+                    <div key={i} className="flex items-center gap-2"
+                      onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}>
+                      <div
+                        className="w-10 h-8 rounded-lg flex items-center justify-center text-xs font-bold cursor-pointer transition-all border flex-shrink-0"
+                        style={{
+                          background: processed || isActive ? layer.color + '22' : '#1e293b',
+                          borderColor: processed || isActive ? layer.color : '#334155',
+                          color: processed || isActive ? layer.color : '#64748b',
+                          boxShadow: isCurrent ? `0 0 12px ${layer.color}` : 'none',
+                          transform: isCurrent ? 'scale(1.05)' : 'scale(1)',
+                        }}>
+                        L{i}
+                      </div>
+                      <span className="text-xs truncate transition-colors flex-1"
+                        style={{ color: processed || isActive ? '#cbd5e1' : '#475569' }}>
+                        {layer.name}
+                      </span>
+                      <span className="text-xs font-mono transition-opacity flex-shrink-0"
+                        style={{ color: layer.color, opacity: processed ? 1 : 0.2 }}>
+                        +Δ
+                      </span>
+                    </div>
+                  )
+                })}
               </div>
-            )}
+
+              {/* accumulation bar — each band persists, nothing overwritten */}
+              <div className="flex flex-col gap-1.5 w-16 flex-shrink-0">
+                {LAYERS.map((layer, i) => {
+                  const filled = i < step
+                  return (
+                    <div key={i} className="h-8 rounded-lg transition-all duration-300 flex items-center justify-center"
+                      style={{
+                        background: filled ? layer.color : 'transparent',
+                        opacity: filled ? 0.35 + 0.55 * ((i + 1) / LAYERS.length) : 1,
+                        border: filled ? 'none' : '1px dashed #1e293b',
+                      }}>
+                      {filled && <span className="text-[10px] font-mono text-white/80">+{i}</span>}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* status / desc */}
+            <div className="mt-3 p-3 rounded-lg border text-xs transition-all min-h-[3.5rem]"
+              style={{
+                borderColor: active != null ? LAYERS[active].color + '40' : '#1e293b',
+                background: active != null ? LAYERS[active].color + '10' : 'rgba(15,23,42,0.4)',
+              }}>
+              {active != null ? (
+                <span className="text-slate-400">
+                  <span style={{ color: LAYERS[active].color }} className="font-semibold">{LAYERS[active].name}: </span>
+                  {LAYERS[active].desc}
+                </span>
+              ) : (
+                <span className="text-slate-500">Press play, or hover a layer. Each one <strong className="text-slate-300">adds</strong> to the stream — the bands on the right pile up and none is ever erased.</span>
+              )}
+            </div>
+            <p className="text-xs text-slate-500 mt-2">
+              {done
+                ? 'All 8 contributions still present in the stream — nothing was overwritten, only added.'
+                : step > 0
+                  ? `Stream now carries ${step} layer${step > 1 ? 's' : ''} of contributions. The original token embedding is still in there.`
+                  : 'The stream starts as the token embedding and grows by addition at every layer.'}
+            </p>
           </div>
 
           {/* Equation + explanation */}

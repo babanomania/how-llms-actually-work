@@ -55,6 +55,76 @@ function nearest(word, n = 3) {
     .sort((a, b) => b.sim - a.sim).slice(0, n)
 }
 
+// --- Vector arithmetic demo -------------------------------------------------
+// A tiny, interpretable embedding built from attribute axes, so analogies come
+// out exact: word = base + gender + (royalty? + youth? + profession? + family?).
+// king − man + woman = queen, prince − boy + girl = princess, actor − man + woman
+// = actress, and so on — every pair shares the same direction.
+const mkWord = ({ male, royal, young, actor, family }) => [
+  1,                // shared "human" base
+  male ? 1 : -1,    // gender axis
+  royal ? 1 : 0,    // royalty axis
+  young ? 1 : 0,    // youth axis
+  actor ? 1 : 0,    // profession axis
+  family ? 1 : 0,   // family-relation axis
+]
+const ANALOGY = {
+  man:      mkWord({ male: true }),
+  woman:    mkWord({ male: false }),
+  king:     mkWord({ male: true,  royal: true }),
+  queen:    mkWord({ male: false, royal: true }),
+  boy:      mkWord({ male: true,  young: true }),
+  girl:     mkWord({ male: false, young: true }),
+  prince:   mkWord({ male: true,  royal: true, young: true }),
+  princess: mkWord({ male: false, royal: true, young: true }),
+  actor:    mkWord({ male: true,  actor: true }),
+  actress:  mkWord({ male: false, actor: true }),
+  uncle:    mkWord({ male: true,  family: true }),
+  aunt:     mkWord({ male: false, family: true }),
+}
+const ANALOGY_WORDS = Object.keys(ANALOGY)
+
+function VectorArithmetic() {
+  const [a, setA] = useState('king')
+  const [b, setB] = useState('man')
+  const [c, setC] = useState('woman')
+
+  const result = ANALOGY[a].map((v, i) => v - ANALOGY[b][i] + ANALOGY[c][i])
+  const ranked = ANALOGY_WORDS
+    .filter(w => w !== a && w !== b && w !== c)
+    .map(w => ({ w, s: cosineSim(result, ANALOGY[w]) }))
+    .sort((x, y) => y.s - x.s)
+  const best = ranked[0]
+  const exact = best.s > 0.999
+
+  const sel = 'bg-slate-800 border border-slate-700 rounded px-1.5 py-1 text-slate-200 focus:outline-none focus:border-indigo-500/50 cursor-pointer'
+  const opts = () => ANALOGY_WORDS.map(w => <option key={w} value={w}>{w}</option>)
+
+  return (
+    <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4">
+      <p className="text-indigo-400 font-semibold text-xs mb-3">Vector arithmetic — pick any three</p>
+      <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs mb-3">
+        <select value={a} onChange={e => setA(e.target.value)} className={sel}>{opts()}</select>
+        <span className="text-slate-500">−</span>
+        <select value={b} onChange={e => setB(e.target.value)} className={sel}>{opts()}</select>
+        <span className="text-slate-500">+</span>
+        <select value={c} onChange={e => setC(e.target.value)} className={sel}>{opts()}</select>
+      </div>
+      <div className="flex items-baseline gap-2">
+        <span className="text-slate-600 font-mono text-sm">≈</span>
+        <span className="text-emerald-400 font-bold text-lg font-mono">{best.w}</span>
+        {exact && <span className="text-emerald-400 text-sm">✓</span>}
+        <span className="text-xs font-mono text-slate-500 ml-auto">{(best.s * 100).toFixed(0)}% match</span>
+      </div>
+      <div className="text-xs text-slate-600 font-mono mt-0.5">next: {ranked[1].w} ({(ranked[1].s * 100).toFixed(0)}%)</div>
+      <p className="text-xs text-slate-600 leading-relaxed mt-2">
+        The hop from <span className="text-slate-400">{b}</span> to <span className="text-slate-400">{c}</span> is a direction.
+        Apply it to <span className="text-slate-400">{a}</span> and you land on a new word — relationships are geometry.
+      </p>
+    </div>
+  )
+}
+
 const W = 500, H = 380, PAD = 28
 const sx = pct => PAD + (pct / 100) * (W - 2 * PAD)
 const sy = pct => PAD + (pct / 100) * (H - 2 * PAD)
@@ -159,18 +229,7 @@ export default function EmbeddingsSection({ embedded = false }) {
             </div>
 
             {/* Vector arithmetic */}
-            <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4">
-              <p className="text-indigo-400 font-semibold text-xs mb-2">Vector Arithmetic</p>
-              <div className="font-mono text-sm space-y-0.5">
-                <div className="text-slate-300">king <span className="text-slate-600">−</span> man</div>
-                <div className="text-slate-500 text-xs pl-2">+ woman</div>
-                <div className="text-slate-600">≈</div>
-                <div className="text-emerald-400 font-bold">queen ✓</div>
-              </div>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Semantic relationships are geometric directions in the space.
-              </p>
-            </div>
+            <VectorArithmetic />
           </div>
         </div>
 
