@@ -1,12 +1,12 @@
 # How LLMs Actually Work
 
-An interactive visual guide to the internals of large language models — from raw text to generated output, covering the transformer architecture, training, alignment, and inference optimizations.
+17 interactive sections that walk through how large language models work, from tokenization to hallucinations.
 
 **Live site:** https://babanomania.github.io/how-llms-actually-work/
 
 ## Credits
 
-Based on the original essay by **0xkato**: [How LLMs Actually Work](https://www.0xkato.xyz/how-llms-actually-work/). This repo turns that written guide into an interactive visual experience.
+Built on [0xkato's original essay](https://www.0xkato.xyz/how-llms-actually-work/) of the same name. This repo adds interactive visualizations to the same material.
 
 ## What's covered
 
@@ -52,7 +52,7 @@ npm run dev
 
 ## Deployment
 
-Automatically deployed to GitHub Pages on every push to `main` via GitHub Actions.
+Deployed to GitHub Pages on every push to `main` via GitHub Actions.
 
 ```bash
 npm run build   # output goes to dist/
